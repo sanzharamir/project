@@ -15,7 +15,7 @@ var commentRoutes = require("./routes/comments"),
 	placeRoutes   = require("./routes/places"),
 	indexRoutes   = require("./routes/index");
 
-mongoose.connect("mongodb://localhost:27017/database", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb+srv://sanzhar:2611982010@cluster0.yxfju.mongodb.net/database?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
