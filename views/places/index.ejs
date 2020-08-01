@@ -1,0 +1,44 @@
+<%- include("../partials/header") %>
+	
+<div class="container">
+	<header class="jumbotron">
+		<div class="container">
+			<h1>
+				Welcome to Tourist Attractions!	
+			</h1>
+			<p>
+				This page is dedicated to beauty of nature of Kazakhstan
+			</p>
+			<p>
+				<a class="btn btn-primary btn-lg" href="/sights/new">Add New Attraction</a>
+			</p>
+		</div>
+	</header>
+	
+	<div class="row">
+		<div class="col-lg-12">
+			<h3>
+				Our Most Popular Sights
+			</h3>
+		</div>
+	</div>
+	<div class="row text-center" style="display-flex: flex; flex-wrap: wrap">
+		<% places.forEach(function(place){ %>
+			<div class="col-md-3 col-sm-6">
+				<div class="thumbnail">
+					<img src="<%= place.image %>">
+					<div class="caption">
+						<h4>
+							<%= place.name %>
+						</h4>
+					</div>
+					<p>
+						<a href="/sights/<%= place._id %>" class="btn btn-primary">More Information</a>	
+					</p>
+				</div>
+			</div>
+		<% }); %>
+	</div>
+</div>
+
+<%- include("../partials/footer") %>
