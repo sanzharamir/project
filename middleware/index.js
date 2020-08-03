@@ -8,7 +8,7 @@ middlewareObj.checkPostOwnership = function(req, res, next){
 		Place.findById(req.params.id, function(err, foundPlace){
 		if(err || !foundPlace){
 			req.flash("error", "Place not found");
-			res.redirect("back");
+			res.redirect("/sights");
 		}
 		else{
 			if(foundPlace.author.id.equals(req.user.id)){
@@ -16,7 +16,7 @@ middlewareObj.checkPostOwnership = function(req, res, next){
 			}
 			else{
 				req.flash("error", "You don't have a permission to do that");
-				res.redirect("back");
+				res.redirect("/sights");
 			}
 		}
 		});
