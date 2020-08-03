@@ -6,7 +6,7 @@ var middlewareObj = {};
 middlewareObj.checkPostOwnership = function(req, res, next){
 	if(req.isAuthenticated()){
 		Place.findById(req.params.id, function(err, foundPlace){
-		if(err){
+		if(err || !foundPlace){
 			req.flash("error", "Place not found");
 			res.redirect("back");
 		}
@@ -15,7 +15,7 @@ middlewareObj.checkPostOwnership = function(req, res, next){
 				next();
 			}
 			else{
-				req.flash("error", "You don't have to permission to do that");
+				req.flash("error", "You don't have a permission to do that");
 				res.redirect("back");
 			}
 		}
@@ -30,7 +30,7 @@ middlewareObj.checkPostOwnership = function(req, res, next){
 middlewareObj.checkCommentOwnership = function(req, res, next){
 	if(req.isAuthenticated()){
 		Comment.findById(req.params.comment_id, function(err, foundComment){
-		if(err){
+		if(err || !foundComment){
 			req.flash("error", "Comment not found");
 			res.redirect("back");
 		}
@@ -39,7 +39,7 @@ middlewareObj.checkCommentOwnership = function(req, res, next){
 				next();
 			}
 			else{
-				req.flash("error", "You don't have to permission to do that");
+				req.flash("error", "You don't have a permission to do that");
 				res.redirect("back");
 			}
 		}
@@ -53,7 +53,7 @@ middlewareObj.checkCommentOwnership = function(req, res, next){
 
 middlewareObj.isLoggedIn = function(req, res, next){
 	if(req.isAuthenticated()){
-		return next();
+		next();
 	}
 	else{
 		req.flash("error", "You need to be logged in to do that");

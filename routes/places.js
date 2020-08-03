@@ -45,8 +45,9 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 //SHOW - show more info about the place
 router.get("/:id", function(req, res){
 	Place. findById(req.params.id).populate("comments").exec(function(err, foundPlace){
-		if(err){
-			console.log(err);
+		if(err || !foundPlace){
+			req.flash("error", "Place not found");
+			res.redirect("back");
 		}
 		else{
 			res.render("places/show.ejs", {place: foundPlace});
@@ -65,7 +66,7 @@ router.get("/:id/edit", middleware.checkPostOwnership, function(req, res){
 router.put("/:id", middleware.checkPostOwnership, function(req, res){
 	Place.findByIdAndUpdate(req.params.id, req.body.place, function(err, updatedPlace){
 		if(err){
-			console.log(err)
+				res.redirect("/sights");
 		}
 		else{
 			res.redirect("/sights/" + req.params.id);
@@ -77,7 +78,7 @@ router.put("/:id", middleware.checkPostOwnership, function(req, res){
 router.delete("/:id", middleware.checkPostOwnership, function(req, res){
 	Place.findByIdAndRemove(req.params.id, function(err){
 		if(err){
-			console.log(err);
+			res.redirect("/sights");
 		}
 		else{
 			res.redirect("/sights");

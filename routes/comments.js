@@ -44,12 +44,20 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 
 //COMMENT EDIT
 router.get("/:comment_id/edit", middleware.checkCommentOwnership, function(req, res){
-	Comment.findById(req.params.comment_id, function(err, foundComment){
-		if(err){
-			console.log(err)
+	Place.findById(req.params.id, function(err, foundPlace){
+		if(err || !foundPlace){
+			req.flash("error", "Place not found");
+			res.redirect("back");
 		}
 		else{
-			res.render("comments/edit.ejs", {place_id: req.params.id, comment: foundComment});
+			Comment.findById(req.params.comment_id, function(err, foundComment){
+				if(err){
+					res.redirect("back");
+				}
+				else{
+					res.render("comments/edit.ejs", {place_id: req.params.id, comment: foundComment});
+				}
+			});
 		}
 	});
 });
