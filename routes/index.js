@@ -33,7 +33,7 @@ router.post("/register", function(req, res){
 
 //shows login form
 router.get("/login", function(req, res){
-	res.render("login.ejs", {page: 'login'});
+	res.render("login.ejs");
 });
 
 //handles login logic
