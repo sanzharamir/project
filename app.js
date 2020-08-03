@@ -8,21 +8,19 @@ var express       = require("express"),
 	Place         = require("./models/place"),
 	User          = require("./models/user"),
 	methodOverride= require("method-override"),
-	seedDB        = require("./seeds"),
 	flash         = require("connect-flash");
 
 var commentRoutes = require("./routes/comments"),
 	placeRoutes   = require("./routes/places"),
 	indexRoutes   = require("./routes/index");
 
-var url = process.env.DATABASEU || "mongodb://localhost:27017/database";
+var url = process.env.DATABASEURL || "mongodb://localhost:27017/database";
 
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
-seedDB();
 
 app.use(require("express-session")({
 	secret: "Secret is hidden here",
