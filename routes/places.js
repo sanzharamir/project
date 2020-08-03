@@ -10,7 +10,7 @@ router.get("/", function(req, res){
 			res.redirect("back");
 		}
 		else{
-			res.render("places/index.ejs", {places: places, page: "places"});
+			res.render("places/index.ejs", {places: places, page: 'places'});
 		}
 	});
 });
