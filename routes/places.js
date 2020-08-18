@@ -42,6 +42,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 	};
 	geocoder.geocode(req.body.location, function (err, data) {
     	if (err || !data.length) {
+			console.log(err);
       		req.flash('error', err);
       		return res.redirect('back');
     	}
