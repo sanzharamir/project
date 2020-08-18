@@ -82,15 +82,27 @@ router.get("/:id/edit", middleware.checkPostOwnership, function(req, res){
 });
 
 //UPDATE - updates the information through put request
+// UPDATE CAMPGROUND ROUTE
 router.put("/:id", middleware.checkPostOwnership, function(req, res){
-	Place.findByIdAndUpdate(req.params.id, req.body.place, function(err, updatedPlace){
-		if(err){
-			res.redirect("/sights");
+	geocoder.geocode(req.body.location, function (err, data) {
+		if (err || !data.length) {
+		  req.flash("error", "Invalid address");
+		  return res.redirect("back");
 		}
-		else{
-			res.redirect("/sights/" + req.params.id);
-		}
-	});
+		req.body.place.lat = data[0].latitude;
+		req.body.place.lng = data[0].longitude;
+		req.body.place.location = data[0].formattedAddress;
+
+		Place.findByIdAndUpdate(req.params.id, req.body.place, function(err, updatedPlace){
+			if(err){
+				req.flash("error", err.message);
+				res.redirect("/sights");
+			} else {
+				req.flash("success","Successfully Updated!");
+				res.redirect("/sights/" + req.params.id);
+			}
+		});
+    });
 });
 
 //DESTROY - remove place
