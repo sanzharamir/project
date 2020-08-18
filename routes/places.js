@@ -1,7 +1,17 @@
-var express = require("express"), 
-	router  = express.Router(),
-	Place   = require("../models/place"),
-	middleware = require("../middleware"); 
+var express 	 = require("express"), 
+	router  	 = express.Router(),
+	Place        = require("../models/place"),
+	middleware   = require("../middleware"),
+	NodeGeocoder = require("node-geocoder");
+ 
+var options = {
+  provider: 'google',
+  httpAdapter: 'https',
+  apiKey: process.env.GEOCODER_API_KEY,
+  formatter: null
+};
+ 
+var geocoder = NodeGeocoder(options);
 
 //INDEX - show all places
 router.get("/", function(req, res){
@@ -30,14 +40,24 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 		id:	req.user._id,
 		username: req.user.username
 	};
-	var newPlace = {name: name, price: price, image: image, description: desc, author: author};
-	Place.create(newPlace, function(err, places){
-		if(err){
-			res.redirect("/sights");
-		}
-		else{
-			res.redirect("/sights");
-		}
+	geocoder.geocode(req.body.location, function (err, data) {
+    	if (err || !data.length) {
+      		req.flash('error', 'Invalid address');
+      		return res.redirect('back');
+    	}
+ 		var lat = data[0].latitude;
+    	var lng = data[0].longitude;
+    	var location = data[0].formattedAddress;
+    	var newPlace = {name: name, image: image, description: desc, author:author, location: location, lat: lat, 
+					lng: lng};
+		Place.create(newPlace, function(err, places){
+			if(err){
+				res.redirect("/sights");
+			}
+			else{
+				res.redirect("/sights");
+			}
+		});
 	});
 });
 
