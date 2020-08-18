@@ -66,7 +66,7 @@
 							<h4>Write your comment <span class="glyphicon glyphicon glyphicon-pencil" 
 														 aria-hidden="true"></span></h4>
 
-							<form id="add-comment-form" action="/campgrounds/<%= place._id %>/comments" 
+							<form id="add-comment-form" action="/sights/<%= place._id %>/comments" 
 								  method="POST">
 								<div class="form-group">
 									<input class="form-control" type="text" 
@@ -122,7 +122,7 @@
 								   href="#collapseEdit<%= comment._id %>" aria-expanded="false" 
 								   aria-controls="collapse<%= comment._id %>">Edit</a>
 								<!--Delete comment button-->
-								<form id="delete-form" action="/campgrounds/<%= campground._id %>/comments/
+								<form id="delete-form" action="/sights/<%= place._id %>/comments/
 								<%= comment._id %>?_method=DELETE" method="POST" style="display: inline;">
 									<button class="btn btn-xs btn-danger">Delete</button>
 								</form>
@@ -132,7 +132,7 @@
 										<h4>Edit your comment <span class="glyphicon glyphicon-edit" 
 												aria-hidden="true"></span></h4>
 										<form id="edit-comment-form<%= comment._id %>" 
-											action="/campgrounds/<%= campground._id %>/comments/
+											action="/sights/<%= place._id %>/comments/
 											<%= comment._id %>?_method=PUT" method="POST">
 											<div class="form-group">
 												<input class="form-control" type="text" disabled 
