@@ -49,8 +49,8 @@ router.post("/", middleware.isLoggedIn, function(req, res){
  		var lat = data[0].latitude;
     	var lng = data[0].longitude;
     	var location = data[0].formattedAddress;
-    	var newPlace = {name: name, image: image, description: desc, author:author, location: location, lat: lat, 
-					lng: lng};
+    	var newPlace = {name: name, price: price, image: image, description: desc, author:author, 
+						location: location, lat: lat, lng: lng};
 		Place.create(newPlace, function(err, places){
 			if(err){
 				res.redirect("/sights");
