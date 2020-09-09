@@ -12,8 +12,9 @@ var express       = require("express"),
 	methodOverride= require("method-override"),
 	flash         = require("connect-flash");
 
-var commentRoutes = require("./routes/comments"),
-	placeRoutes   = require("./routes/places"),
+var	placeRoutes   = require("./routes/places"),
+	reviewRoutes  = require("./routes/reviews"),
+ 	commentRoutes = require("./routes/comments"),
 	indexRoutes   = require("./routes/index");
 
 var url = process.env.DATABASEURL || "mongodb://localhost:27017/database";
@@ -46,8 +47,9 @@ app.use(function(req, res, next){
 
 //ROUTES
 app.use("/", indexRoutes);
-app.use("/sights/:id/comments", commentRoutes);
 app.use("/sights", placeRoutes);
+app.use("/sights/:id/comments", commentRoutes);
+app.use("/sights/:id/reviews", reviewRoutes);
 
 //LISTEN
 app.listen(process.env.PORT || 3000, function(){

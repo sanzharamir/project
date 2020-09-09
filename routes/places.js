@@ -1,6 +1,8 @@
 var express 	 = require("express"), 
 	router  	 = express.Router(),
 	Place        = require("../models/place"),
+	Comment 	 = require("../models/comment"),
+	Review       = require("../models/review"),
 	middleware   = require("../middleware"),
 	NodeGeocoder = require("node-geocoder");
  
@@ -64,7 +66,10 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 
 //SHOW - show more info about the place
 router.get("/:id", function(req, res){
-	Place. findById(req.params.id).populate("comments").exec(function(err, foundPlace){
+	Place.findById(req.params.id).populate("comments").populate({
+        path: "reviews",
+        options: {sort: {createdAt: -1}}
+    }).exec(function(err, foundPlace){
 		if(err || !foundPlace){
 			req.flash("error", "Place not found");
 			res.redirect("/sights");
@@ -83,8 +88,9 @@ router.get("/:id/edit", middleware.checkPostOwnership, function(req, res){
 });
 
 //UPDATE - updates the information through put request
-// UPDATE CAMPGROUND ROUTE
 router.put("/:id", middleware.checkPostOwnership, function(req, res){
+	delete req.body.place.rating;
+	
 	geocoder.geocode(req.body.location, function (err, data) {
 		if (err || !data.length) {
 		  req.flash("error", "Invalid address");
@@ -108,12 +114,28 @@ router.put("/:id", middleware.checkPostOwnership, function(req, res){
 
 //DESTROY - remove place
 router.delete("/:id", middleware.checkPostOwnership, function(req, res){
-	Place.findByIdAndRemove(req.params.id, function(err){
+	Place.findByIdAndRemove(req.params.id, function(err, place){
 		if(err){
 			res.redirect("/sights");
 		}
-		
 		else{
+			Comment.remove({"_id": {$in: place.comments}}, function (err) {
+                if (err) {
+                    console.log(err);
+                    return res.redirect("/sights");
+                }
+                // deletes all reviews associated with the place
+                Review.remove({"_id": {$in: place.reviews}}, function (err) {
+                    if (err) {
+                        console.log(err);
+                        return res.redirect("/sights");
+                    }
+                    //  delete the place
+                    place.remove();
+                    req.flash("success", "Place deleted successfully!");
+                    res.redirect("/sights");
+                });
+            });
 			res.redirect("/sights");
 		}
 	});

@@ -4,10 +4,10 @@
 	<header class="jumbotron">
 		<div class="container">
 			<h1>
-				Welcome to Tourist Attractions!	
+				Welcome to NaturalWonders!	
 			</h1>
 			<p>
-				This page is dedicated to beauty of nature of Kazakhstan
+				This page is dedicated to Natural Attractions all around the globe 
 			</p>
 			<p>
 				<a class="btn btn-primary btn-lg" href="/sights/new">Add New Attraction</a>
@@ -31,6 +31,15 @@
 						<h4>
 							<%= place.name %>
 						</h4>
+						<% if (place.rating === 0) { %>
+                    	<em>No reviews yet.</em>
+                    	<% } else { %>
+                    	<span class="fa fa-star checked"></span>
+                    	<span class="fa fa-star <% if (place.rating > 1.5) { %> checked <% } %>"></span>
+                    	<span class="fa fa-star <% if (place.rating > 2.5) { %> checked <% } %>"></span>
+                    	<span class="fa fa-star <% if (place.rating > 3.5) { %> checked <% } %>"></span>
+                    	<span class="fa fa-star <% if (place.rating > 4.5) { %> checked <% } %>"></span>
+                    	<% } %>
 					</div>
 					<p>
 						<a href="/sights/<%= place._id %>" class="btn btn-primary">More Information</a>	

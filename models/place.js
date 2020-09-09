@@ -1,8 +1,9 @@
-var mongoose = require("mongoose");
+var mongoose = require("mongoose"),
+	Comment  = require("./comment"),
+	Review   = require("./review");
 
 var placeSchema = new mongoose.Schema({
 	name: String,
-	price: String,
 	image: String,
 	description: String,
 	location: String,
@@ -21,7 +22,17 @@ var placeSchema = new mongoose.Schema({
         	type: mongoose.Schema.Types.ObjectId,
         	ref: "Comment"
       	}
-	]
+	],
+	reviews: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Review"
+        }
+    ],
+    rating: {
+        type: Number,
+        default: 0
+    }
 });
 
 module.exports = mongoose.model("Place", placeSchema);
