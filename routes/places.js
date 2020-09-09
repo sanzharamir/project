@@ -118,6 +118,7 @@ router.delete("/:id", middleware.checkPostOwnership, function(req, res){
 		if(err){
 			res.redirect("/sights");
 		}
+		
 		else{
 			Comment.remove({"_id": {$in: place.comments}}, function (err) {
                 if (err) {
