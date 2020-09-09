@@ -14,7 +14,7 @@ router.get("/", function (req, res) {
             req.flash("error", err.message);
             return res.redirect("back");
         }
-        res.render("reviews/index", {place: place});
+        res.render("reviews/index.ejs", {place: place});
     });
 });
 
@@ -26,7 +26,7 @@ router.get("/new", middleware.isLoggedIn, middleware.checkReviewExistence, funct
             req.flash("error", err.message);
             return res.redirect("back");
         }
-        res.render("reviews/new", {place: place});
+        res.render("reviews/new.ejs", {place: place});
 
     });
 });
@@ -68,7 +68,7 @@ router.get("/:review_id/edit", middleware.checkReviewOwnership, function (req, r
             req.flash("error", err.message);
             return res.redirect("back");
         }
-        res.render("reviews/edit", {place_id: req.params.id, review: foundReview});
+        res.render("reviews/edit.ejs", {place_id: req.params.id, review: foundReview});
     });
 });
 
