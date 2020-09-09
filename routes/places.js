@@ -112,6 +112,7 @@ router.delete("/:id", middleware.checkPostOwnership, function(req, res){
 		if(err){
 			res.redirect("/sights");
 		}
+		
 		else{
 			res.redirect("/sights");
 		}
