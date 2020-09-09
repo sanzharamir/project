@@ -20,7 +20,7 @@ router.get("/", function (req, res) {
 
 // Reviews New
 router.get("/new", middleware.isLoggedIn, middleware.checkReviewExistence, function (req, res) {
-    // middleware.checkReviewExistence checks if a user already reviewed the campground, only one review per user is allowed
+    // middleware.checkReviewExistence checks if a user already reviewed the place, only one review per user is allowed
     Place.findById(req.params.id, function (err, place) {
         if (err) {
             req.flash("error", err.message);
@@ -33,8 +33,8 @@ router.get("/new", middleware.isLoggedIn, middleware.checkReviewExistence, funct
 
 // Reviews Create
 router.post("/", middleware.isLoggedIn, middleware.checkReviewExistence, function (req, res) {
-    //lookup campground using ID
-    Campground.findById(req.params.id).populate("reviews").exec(function (err, place) {
+    //lookup place using ID
+    Place.findById(req.params.id).populate("reviews").exec(function (err, place) {
         if (err) {
             req.flash("error", err.message);
             return res.redirect("back");
@@ -44,16 +44,16 @@ router.post("/", middleware.isLoggedIn, middleware.checkReviewExistence, functio
                 req.flash("error", err.message);
                 return res.redirect("back");
             }
-            //add author username/id and associated campground to the review
+            //add author username/id and associated place to the review
             review.author.id = req.user._id;
             review.author.username = req.user.username;
             review.place = place;
             //save review
             review.save();
             place.reviews.push(review);
-            // calculate the new average review for the campground
+            // calculate the new average review for the place
             place.rating = calculateAverage(place.reviews);
-            //save campground
+            //save place
             place.save();
             req.flash("success", "Your review has been successfully added.");
             res.redirect("/sights/" + place._id);
@@ -84,7 +84,7 @@ router.put("/:review_id", middleware.checkReviewOwnership, function (req, res) {
                 req.flash("error", err.message);
                 return res.redirect("back");
             }
-            // recalculate campground average
+            // recalculate place average
             place.rating = calculateAverage(place.reviews);
             //save changes
             place.save();
@@ -106,7 +106,7 @@ router.delete("/:review_id", middleware.checkReviewOwnership, function (req, res
                 req.flash("error", err.message);
                 return res.redirect("back");
             }
-            // recalculate campground average
+            // recalculate place average
             place.rating = calculateAverage(place.reviews);
             //save changes
             place.save();
